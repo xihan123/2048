@@ -1,0 +1,78 @@
+apply plugin: 'com.android.application'
+apply from: 'and_res_guard.gradle'
+
+
+def keystoreFilepath = ''
+def keystorePSW = ''
+def keystoreAlias = ''
+def keystoreAliasPSW = ''
+// default keystore file, PLZ config file path in local.properties
+def keyfile = file('s.keystore.temp')
+
+Properties properties = new Properties()
+// local.properties file in the root director
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+keystoreFilepath = properties.getProperty("keystore.path")
+
+if (keystoreFilepath) {
+    keystorePSW = properties.getProperty("keystore.password")
+    keystoreAlias = properties.getProperty("keystore.alias")
+    keystoreAliasPSW = properties.getProperty("keystore.alias_password")
+    keyfile = file(keystoreFilepath)
+}
+
+android {
+    signingConfigs {
+        xihan {
+            keyAlias keystoreAlias
+            keyPassword keystoreAliasPSW
+            storeFile keyfile
+            storePassword keystorePSW
+        }
+    }
+    compileSdkVersion 30
+    buildToolsVersion '30.0.1'
+
+    defaultConfig {
+        applicationId "com.xihan.elsbgame"
+        minSdkVersion 21
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.xihan
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            shrinkResources true
+            zipAlignEnabled true
+            pseudoLocalesEnabled true
+            renderscriptOptimLevel = 3
+            signingConfig signingConfigs.xihan
+        }
+    }
+    dexOptions {
+        javaMaxHeapSize "2048m"
+        // 忽略方法数限制的检查
+        jumboMode true
+        // 是否对依赖的库进行dex 预处理来使你的增量构建更快速，
+        // 因为这个特性可能会使你的clean 构建变慢，
+        // 因此在你的持续集成服务器上你可能想关闭这个特性
+        preDexLibraries true
+        //设置最大的线程数量使用当运行 dex-in-process时,默认值是4，如果不确定，还是用默认值吧
+        maxProcessCount 8
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+
+
+}

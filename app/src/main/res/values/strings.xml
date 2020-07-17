@@ -1,0 +1,19 @@
+<resources>
+
+
+    <string name="high_score">历史最高分</string>
+    <string name="score">得分</string>
+    <string name="instructions">滑动即可. 2 + 2 = 4. 达到 2048.</string>
+    <string name="you_win">You Win!</string>
+    <string name="game_over">Game Over!</string>
+    <string name="go_on">点按继续</string>
+    <string name="for_now">目前…</string>
+    <string name="endless">"无尽" 模式</string>
+
+    <!-- Confirmation dialog-->
+    <string name="reset">重置</string>
+    <string name="continue_game">取消</string>
+    <string name="reset_dialog_title">重置游戏?</string>
+    <string name="reset_dialog_message">你确定要重置游戏吗?</string>
+
+</resources>
